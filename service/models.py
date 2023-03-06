@@ -31,10 +31,7 @@ class YourResourceModel(db.Model):
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    wishlist_name = db.Column(db.String(63), nullable=False)
-    customer_id = db.Column(db.String(63), nullable=False)
-    item_id = db.Column(db.String(63), nullable=True) #can be an empty list
-
+    name = db.Column(db.String(63))
 
     def __repr__(self):
         return f"<YourResourceModel {self.name} id=[{self.id}]>"
@@ -63,7 +60,7 @@ class YourResourceModel(db.Model):
 
     def serialize(self):
         """ Serializes a YourResourceModel into a dictionary """
-        return {"id": self.id, "wishlist name": self.wishlist_name, "customer id": self.customer_id, "item id": self.customer_id}
+        return {"id": self.id, "name": self.name}
 
     def deserialize(self, data):
         """
@@ -73,11 +70,7 @@ class YourResourceModel(db.Model):
             data (dict): A dictionary containing the resource data
         """
         try:
-            self.wishlist_name = data["wishlist name"]
-            self.id = data['id']
-            self.customer_id = data['customer id']
-            if data['item_id'] != None:
-                self.item_id = data['item id']
+            self.name = data["name"]
         except KeyError as error:
             raise DataValidationError(
                 "Invalid YourResourceModel: missing " + error.args[0]
