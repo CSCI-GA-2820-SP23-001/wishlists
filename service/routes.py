@@ -1,7 +1,7 @@
 """
-My Service
+Delete an Item
 
-Describe what your service does here
+This endpoint will delete an Item from the wishlist based on the ID specified in the path
 """
 
 from flask import Flask, jsonify, request, url_for, make_response, abort
@@ -13,16 +13,22 @@ from . import app
 
 
 ######################################################################
-# GET INDEX
+# DELETE AN EXISTING ITEM
 ######################################################################
-@app.route("/")
-def index():
-    """ Root URL response """
-    return (
-        "Reminder: return some useful information in json format about the service here",
-        status.HTTP_200_OK,
-    )
-
+@app.route("/items/<int:item_id>", methods=["DELETE"])
+def delete_items(item_id):
+    """ 
+    Delete an Item
+    
+    This endpoint will delete an Item from the wishlist based on the ID specified in the path
+    """
+    app.logger.info("Request to delete item with ID: %s", item_id)
+    item = Item.find(item_id)
+    if item:
+        item.delete()
+    
+    app.logger.info("Item with ID [%s] delete complete.", item_id)
+    return "", status.HTTP_204_NO_CONTENT
 
 ######################################################################
 #  R E S T   A P I   E N D P O I N T S
