@@ -55,6 +55,26 @@ tests/              - test cases package
 └── test_routes.py  - test suite for service routes
 ```
 
+## These are the RESTful routes for Wishlists and items
+
+
+```
+Endpoint          Methods  Rule
+----------------  -------  -----------------------------------------------------
+index           GET      /
+
+list_wishlists  GET      /wishlists
+create_orders   POST     /wishlists
+get_wishlist    GET      /wishlist/<order_id>
+update_wishlist PUT      /wishlist/<order_id>
+delete_orders   DELETE   /wishlist/<order_id>
+
+list_items      GET      /wishlists/<int:wishlist_id>/items
+create_items    POST     /wishlist/<wishlist_id>/items
+get_items       GET      /wishlist/<wishlist_id>/items/<item_id>
+update_items    PUT      /wishlist/<wishlist_id>/items/<item_id>
+delete_items    DELETE   /wishlist/<wishlist_id>/items/<item_id>
+
 ## License
 
 Copyright (c) John Rofrano. All rights reserved.
