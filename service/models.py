@@ -165,7 +165,7 @@ class Wishlist(db.Model, PersistentBase):
             "items": [],
         }
         for item in self.items:
-            wishlist["items"].append(items.serialize())
+            wishlist["items"].append(item.serialize())
         return wishlist
 
     def deserialize(self, data):
@@ -183,7 +183,7 @@ class Wishlist(db.Model, PersistentBase):
             items_list = data.get("items")
             for json_items in items_list:
                 item = Item()
-                item.deserialize(json_item)
+                item.deserialize(json_items)
                 self.items.append(item)
         except KeyError as error:
             raise DataValidationError("Invalid Wishlist: missing " + error.args[0]) from error
