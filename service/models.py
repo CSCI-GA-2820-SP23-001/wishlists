@@ -96,8 +96,8 @@ class Item(db.Model, PersistentBase):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
-    item_id = db.Column(db.Integer(64))
-    count = db.Column(db.Integer(64))
+    item_id = db.Column(db.Integer)
+    count = db.Column(db.Integer)
 
 
     def __repr__(self):
