@@ -42,7 +42,7 @@ class PersistentBase:
 
     def create(self):
         """
-        Creates a Account to the database
+        Creates a Wishlisht to the database
         """
         logger.info("Creating %s", self.name)
         self.id = None  # id must be none to generate next primary key
@@ -51,14 +51,14 @@ class PersistentBase:
 
     def update(self):
         """
-        Updates a Account to the database
+        Updates a Wishlist to the database
         """
         logger.info("Updating %s", self.name)
         db.session.commit()
 
     def delete(self):
         """Removes a Account from the data store"""
-        logger.info("Deleting %s", self.name)
+        logger.info("Deleting %s", self.id)
         db.session.delete(self)
         db.session.commit()
 
@@ -160,7 +160,7 @@ class Wishlist(db.Model, PersistentBase):
         """Converts an Wishlist into a dictionary"""
         wishlist = {
             "id": self.id,
-            "account": self.account_id,
+            "account_id": self.account_id,
             "name": self.name,
             "items": [],
         }
@@ -177,7 +177,7 @@ class Wishlist(db.Model, PersistentBase):
         """
         try:
             self.id = data["id"]
-            self.account = data["account_id"]
+            self.account_id = data["account_id"]
             self.name = data["name"]
             # handle inner list of addresses
             items_list = data.get("items")
