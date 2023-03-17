@@ -49,7 +49,7 @@ class TestWishlistService(TestCase):
     def tearDown(self):
         """Runs once after each test case"""
         db.session.remove()
-
+    
     ######################################################################
     #  H E L P E R   M E T H O D S
     ######################################################################
@@ -73,6 +73,11 @@ class TestWishlistService(TestCase):
     ######################################################################
     #  W I S H L I S T   T E S T   C A S E S
     ######################################################################
+    
+    def test_index(self):
+        """It should call the Home Page"""
+        resp = self.client.get("/")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_create_wishlist(self):
         """It should Create a new Wishlist"""
@@ -114,3 +119,11 @@ class TestWishlistService(TestCase):
         """It should not allow an illegal method call"""
         resp = self.client.put(BASE_URL, json={"not": "today"})
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_get_wishlist_list(self):
+        """It should Get a list of wishlists"""
+        self._create_wishlists(5)
+        resp = self.client.get(BASE_URL)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 5)

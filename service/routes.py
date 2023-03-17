@@ -55,6 +55,55 @@ def create_wishlists():
 
 
 ######################################################################
+# CREATE A NEW WISHLIST
+######################################################################
+@app.route("/wishlists", methods=["POST"])
+def create_wishlists():
+    """
+    Creates a wishlist
+    This endpoint will create an wishlist based the data in the body that is posted
+    """
+    app.logger.info("Request to create an wishlist")
+    check_content_type("application/json")
+
+    # Create the wishlist
+    wishlist = Wishlist()
+    wishlist.deserialize(request.get_json())
+    wishlist.create()
+
+    # Create a message to return
+    message = wishlist.serialize()
+    # Uncomment this code once get_wishlists is implemented
+    location_url = url_for("list_wishlists", wishlist_id=wishlist.id, _external=True)
+    #location_url = "Unknown"
+    
+    return make_response(
+        jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+    )
+
+
+######################################################################
+# LIST ALL ACCOUNTS
+######################################################################
+@app.route("/wishlists", methods=["GET"])
+def list_wishlists():
+    """Returns all of the Wishlists"""
+    app.logger.info("Request for Wishlist list")
+    wishlists = []
+
+    # Process the query string if any
+    name = request.args.get("name")
+    if name:
+        wishlists = Wishlist.find_by_name(name)
+    else:
+        wishlists = Wishlist.all()
+
+    # Return as an array of dictionaries
+    results = [wishlist.serialize() for wishlist in wishlists]
+
+    return make_response(jsonify(results), status.HTTP_200_OK)
+
+######################################################################
 #  R E S T   A P I   E N D P O I N T S
 ######################################################################
 
