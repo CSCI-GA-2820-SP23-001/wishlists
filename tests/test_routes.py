@@ -49,7 +49,7 @@ class TestWishlistService(TestCase):
     def tearDown(self):
         """Runs once after each test case"""
         db.session.remove()
-
+    
     ######################################################################
     #  H E L P E R   M E T H O D S
     ######################################################################
