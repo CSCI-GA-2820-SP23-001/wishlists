@@ -66,7 +66,7 @@ class TestWishlistService(TestCase):
                 "Could not create test wishlist",
             )
             new_wishlist = resp.get_json()
-            wishlists.id = new_wishlist["id"]
+            wishlist.id = new_wishlist["id"]
             wishlists.append(wishlist)
         return wishlists
     
