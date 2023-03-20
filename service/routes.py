@@ -76,6 +76,27 @@ def list_wishlists():
     return make_response(jsonify(results), status.HTTP_200_OK)
 
 ######################################################################
+# DELETE AN ITEM
+######################################################################
+@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["DELETE"])
+def delete_items(wishlist_id, item_id):
+    """
+    Delete an Item
+    This endpoint will delete an Item based the id specified in the path
+    """
+    app.logger.info(
+        "Request to delete Item %s for Wishlist id: %s", (item_id, wishlist_id)
+    )
+
+    # See if the item exists and delete it if it does
+    item = Item.find(item_id)
+    if item:
+        item.delete()
+
+    return make_response("", status.HTTP_204_NO_CONTENT)
+
+######################################################################
+######################################################################
 #  R E S T   A P I   E N D P O I N T S
 ######################################################################
 
