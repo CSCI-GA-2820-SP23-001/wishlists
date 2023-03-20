@@ -59,3 +59,4 @@ class ItemFactory(factory.Factory):
     count = FuzzyChoice(choices=[1, 2, 3, 4])
     wishlist_id = None
     wishlist = factory.SubFactory(WishlistFactory)
+
