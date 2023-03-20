@@ -97,6 +97,7 @@ class Item(db.Model, PersistentBase):
     id = db.Column(db.Integer, primary_key=True)
     wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
     item_id = db.Column(db.Integer)
+
     count = db.Column(db.Integer)
 
 
@@ -117,7 +118,7 @@ class Item(db.Model, PersistentBase):
 
     def deserialize(self, data: dict) -> None:
         """
-        Populates an Address from a dictionary
+        Populates an Item from a dictionary
 
         Args:
             data (dict): A dictionary containing the resource data
@@ -128,10 +129,10 @@ class Item(db.Model, PersistentBase):
             self.item_id = data["item_id"]
             self.count = data["count"]
         except KeyError as error:
-            raise DataValidationError("Invalid Wishlist: missing " + error.args[0]) from error
+            raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
         except TypeError as error:
             raise DataValidationError(
-                "Invalid Wishlist: body of request contained "
+                "Invalid Item: body of request contained "
                 "bad or no data " + error.args[0]
             ) from error
         return self
