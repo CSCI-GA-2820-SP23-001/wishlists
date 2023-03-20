@@ -89,8 +89,8 @@ class TestWishlistService(TestCase):
 
         #UNCOMMENT WHEN READ IS DONE
         # Make sure location header is set
-        #location = resp.headers.get("Location", None)
-        #self.assertIsNotNone(location)
+        location = resp.headers.get("Location", None)
+        self.assertIsNotNone(location)
 
         # Check the data is correct
         new_wishlist = resp.get_json()
@@ -100,7 +100,7 @@ class TestWishlistService(TestCase):
 
         #uncomment when read is done
         # Check that the location header was correct by getting it
-        #resp = self.client.get(location, content_type="application/json")
+        # resp = self.client.get(location, content_type="application/json")
         # self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # new_wishlist = resp.get_json()
         # self.assertEqual(new_wishlist["name"], wishlist.name, "Names does not match")
