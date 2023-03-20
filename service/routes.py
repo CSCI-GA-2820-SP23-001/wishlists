@@ -76,6 +76,30 @@ def list_wishlists():
     return make_response(jsonify(results), status.HTTP_200_OK)
 
 ######################################################################
+# READ AN ITEM FROM A WISHLIST
+######################################################################
+@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["GET"])
+def get_items(wishlist_id, item_id):
+    """
+    Get an Item
+    This endpoint returns just an item
+    """
+    app.logger.info(
+        "Request to retrieve Item %s for Wishlist id: %s", (item_id, wishlist_id)
+    )
+
+    # See if the item exists and abort if it doesn't
+    item = Item.find(item_id)
+    if not item:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Wishlist with id '{item_id}' could not be found.",
+        )
+
+    return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
+
+
+######################################################################
 # ADD AN ADDRESS TO AN ACCOUNT
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>/items", methods=["POST"])

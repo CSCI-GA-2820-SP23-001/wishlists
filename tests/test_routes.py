@@ -145,3 +145,33 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["item_id"], item.item_id)
         self.assertEqual(data["count"], item.count)
     
+
+    #Read an Item on Wishlist
+    def test_get_item(self):
+        """It should Get an item from an wishlist"""
+        # create a known item
+        wishlist = self._create_wishlists(1)[0]
+        item = ItemFactory()
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items",
+            json=item.serialize(),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        data = resp.get_json()
+        logging.debug(data)
+        item_id = data["id"]
+
+        # retrieve it back
+        resp = self.client.get(
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        data = resp.get_json()
+        logging.debug(data)
+        self.assertEqual(data["wishlist_id"], wishlist.id)
+        self.assertEqual(data["item_id"], item.item_id)
+        self.assertEqual(data["count"], item.count)
