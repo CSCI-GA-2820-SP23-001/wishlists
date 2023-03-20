@@ -55,7 +55,8 @@ class ItemFactory(factory.Factory):
         model = Item
 
     id = factory.Sequence(lambda n: n)
-    item_id = FuzzyChoice(choices=["1", "2", "3", "4"])
-    count = FuzzyChoice(choices=["1", "2", "3", "4"])
+    item_id = FuzzyChoice(choices=[1, 2, 3, 4])
+    count = FuzzyChoice(choices=[1, 2, 3, 4])
     wishlist_id = None
     wishlist = factory.SubFactory(WishlistFactory)
+
