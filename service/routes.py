@@ -100,6 +100,39 @@ def get_items(wishlist_id, item_id):
 
 
 ######################################################################
+# ADD AN ADDRESS TO AN ACCOUNT
+######################################################################
+@app.route("/wishlists/<int:wishlist_id>/items", methods=["POST"])
+def create_items(wishlist_id):
+    """
+    Create an Item on an Wishlist
+    This endpoint will add an item to an wishlist
+    """
+    app.logger.info("Request to create an Item for Wishlist with id: %s", wishlist_id)
+    check_content_type("application/json")
+
+    # See if the wishlist exists and abort if it doesn't
+    wishlist = Wishlist.find(wishlist_id)
+    if not wishlist:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Wishlist with id '{wishlist_id}' could not be found.",
+        )
+
+    # Create an item from the json data
+    item = Item()
+    item.deserialize(request.get_json())
+
+    # Append the item to the wishlist
+    wishlist.items.append(item)
+    wishlist.update()
+
+    # Prepare a message to return
+    message = item.serialize()
+
+    return make_response(jsonify(message), status.HTTP_201_CREATED)
+
+######################################################################
 #  R E S T   A P I   E N D P O I N T S
 ######################################################################
 
