@@ -51,7 +51,7 @@ def create_wishlists():
     # Create a message to return
     message = wishlist.serialize()
     # Uncomment this code once get_wishlists is implemented
-    location_url = url_for("create_wishlists", wishlist_id=wishlist.id, _external=True)
+    location_url = url_for("get_wishlists", wishlist_id=wishlist.id, _external=True)
     #location_url = "Unknown"
     
     return make_response(
