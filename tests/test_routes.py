@@ -74,6 +74,34 @@ class TestWishlistService(TestCase):
     #  W I S H L I S T   T E S T   C A S E S
     ######################################################################
     
+    #################################################################
+    #Error Handling
+    #################################################################
+
+    def test_unsupported_media_type(self):
+        """It should not Create when sending wrong media type"""
+        wishlist = WishlistFactory()
+        resp = self.client.post(
+            BASE_URL, json=wishlist.serialize(), content_type="test/html"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    
+    #test to hit 409 errors
+    # def test_conflict(self):
+    #     """It should not allow a service transfer request"""
+    #     wishlist = WishlistFactory()
+    #     self.client.post(
+    #         BASE_URL, json=wishlist.serialize(), content_type="application/json"
+    #     )
+    #     resp = self.client.post(
+    #         BASE_URL, json=wishlist.serialize(), content_type="application/json"
+    #     )
+    #     self.assertEqual(resp.status_code, status.HTTP_409_CONFLICT)
+
+    #################################################################
+    #Create
+    #################################################################
+
     def test_index(self):
         """It should call the Home Page"""
         resp = self.client.get("/")
@@ -148,7 +176,7 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["count"], item.count)
     
     #################################################################
-    #Read an Item on Wishlist
+    #Read
     #################################################################
     def test_get_item(self):
         """It should Get an item from an wishlist"""
