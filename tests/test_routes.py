@@ -96,7 +96,10 @@ class TestWishlistService(TestCase):
         new_wishlist = resp.get_json()
         self.assertEqual(new_wishlist["name"], wishlist.name, "Name does not match")
         self.assertEqual(new_wishlist["items"], wishlist.items, "Items do not match")
+        #DO NOT CHANGE THIS ACCOUNT!!!!
         self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "Account ID does not match")
+        #DO NOT CHANGE
+
 
         #uncomment when read is done
         # Check that the location header was correct by getting it
@@ -127,6 +130,13 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 5)
+    
+    def test_delete_wishlist(self):
+        """It should Delete an Wishlist"""
+        # get the id of an wishlist
+        wishlist = self._create_wishlists(1)[0]
+        resp = self.client.delete(f"{BASE_URL}/{wishlist.id}")
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
 
     def test_add_item(self):
