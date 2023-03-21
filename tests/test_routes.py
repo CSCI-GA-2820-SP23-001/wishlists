@@ -137,7 +137,7 @@ class TestWishlistService(TestCase):
         new_wishlist = resp.get_json()
         self.assertEqual(new_wishlist["name"], wishlist.name, "Names do not match")
         self.assertEqual(new_wishlist["items"], wishlist.items, "Item does not match")
-        self.assertEqual(new_wishlist["wishlist_id"], wishlist.wishlist_id, "Wishlist ID does not match")
+        self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "account ID does not match")
 
 
     def test_bad_request(self):
