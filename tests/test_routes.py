@@ -74,6 +74,34 @@ class TestWishlistService(TestCase):
     #  W I S H L I S T   T E S T   C A S E S
     ######################################################################
     
+    #################################################################
+    #Error Handling
+    #################################################################
+
+    def test_unsupported_media_type(self):
+        """It should not Create when sending wrong media type"""
+        wishlist = WishlistFactory()
+        resp = self.client.post(
+            BASE_URL, json=wishlist.serialize(), content_type="test/html"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+    
+    #test to hit 409 errors
+    # def test_conflict(self):
+    #     """It should not allow a service transfer request"""
+    #     wishlist = WishlistFactory()
+    #     self.client.post(
+    #         BASE_URL, json=wishlist.serialize(), content_type="application/json"
+    #     )
+    #     resp = self.client.post(
+    #         BASE_URL, json=wishlist.serialize(), content_type="application/json"
+    #     )
+    #     self.assertEqual(resp.status_code, status.HTTP_409_CONFLICT)
+
+    #################################################################
+    #Create
+    #################################################################
+
     def test_index(self):
         """It should call the Home Page"""
         resp = self.client.get("/")
@@ -101,7 +129,16 @@ class TestWishlistService(TestCase):
         self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "Account ID does not match")
         #DO NOT CHANGE
 
-
+        # update the wishlist
+        new_wishlist = resp.get_json()
+        new_wishlist["name"] = "Happy-Happy Joy-Joy"
+        new_wishlist_id = new_wishlist["id"]
+        resp = self.client.put(f"{BASE_URL}/{new_wishlist_id}", json=new_wishlist)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_wishlist = resp.get_json()
+        self.assertEqual(updated_wishlist["name"], "Happy-Happy Joy-Joy")
+        
+        
         #uncomment when read is done
         #Check that the location header was correct by getting it
         resp = self.client.get(location, content_type="application/json")
@@ -166,7 +203,7 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["count"], item.count)
     
     #################################################################
-    #Read an Item on Wishlist
+    #Read
     #################################################################
     def test_get_item(self):
         """It should Get an item from an wishlist"""
@@ -184,6 +221,16 @@ class TestWishlistService(TestCase):
         logging.debug(data)
         item_id = data["id"]
 
+        
+        # send the update back
+        resp = self.client.put(
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            json=data,
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        
         # retrieve it back
         resp = self.client.get(
             f"{BASE_URL}/{wishlist.id}/items/{item_id}",
