@@ -79,6 +79,7 @@ class TestWishlistService(TestCase):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+
     def test_create_wishlist(self):
         """It should Create a new Wishlist"""
         wishlist = WishlistFactory()
@@ -102,15 +103,13 @@ class TestWishlistService(TestCase):
 
 
         #uncomment when read is done
-        # Check that the location header was correct by getting it
-        # resp = self.client.get(location, content_type="application/json")
-        # self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        # new_wishlist = resp.get_json()
-        # self.assertEqual(new_wishlist["name"], wishlist.name, "Names does not match")
-        # self.assertEqual(
-        #     new_wishlist["items"], wishlist.items, "Item does not match"
-        # )
-        # self.assertEqual(new_wishlist["wishlist_id"], wishlist.wishlist_id, "Wishlist ID does not match")
+        #Check that the location header was correct by getting it
+        resp = self.client.get(location, content_type="application/json")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        new_wishlist = resp.get_json()
+        self.assertEqual(new_wishlist["name"], wishlist.name, "Names do not match")
+        self.assertEqual(new_wishlist["items"], wishlist.items, "Item does not match")
+        self.assertEqual(new_wishlist["wishlist_id"], wishlist.wishlist_id, "Wishlist ID does not match")
 
 
     def test_bad_request(self):
@@ -130,6 +129,25 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 5)
+
+    def test_get_wishlist_by_name(self):
+        """It should Get an Wishlist by Name"""
+        wishlists = self._create_wishlists(3)
+        resp = self.client.get(BASE_URL, query_string=f"name={wishlists[1].name}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(data[0]["name"], wishlists[1].name)
+
+    def test_get_wishlist(self):
+        """It should Read a single Wishlist"""
+        # get the id of an wishlist
+        wishlist = self._create_wishlists(1)[0]
+        resp = self.client.get(
+            f"{BASE_URL}/{wishlist.id}", content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(data["name"], wishlist.name)
 
     def test_add_item(self):
         """It should Add an item to an wishlist"""
