@@ -24,7 +24,9 @@ def index():
         status.HTTP_200_OK,
     )
 
-
+######################################################################
+#  R E S T   A P I   E N D P O I N T S
+######################################################################
 
 ######################################################################
 # CREATE A NEW WISHLIST
@@ -100,7 +102,7 @@ def get_items(wishlist_id, item_id):
 
 
 ######################################################################
-# ADD AN ITEM TO AN WISHLIST
+# ADD AN ITEM TO A WISHLIST
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>/items", methods=["POST"])
 def create_items(wishlist_id):
@@ -133,7 +135,7 @@ def create_items(wishlist_id):
     return make_response(jsonify(message), status.HTTP_201_CREATED)
 
 ######################################################################
-# DELETE AN WISHLIST
+# DELETE A WISHLIST
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>", methods=["DELETE"])
 def delete_wishlists(wishlist_id):
@@ -150,13 +152,25 @@ def delete_wishlists(wishlist_id):
 
     return make_response("", status.HTTP_204_NO_CONTENT)
 
-
 ######################################################################
-#  R E S T   A P I   E N D P O I N T S
+# DELETE AN ITEM
 ######################################################################
+@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["DELETE"])
+def delete_items(wishlist_id, item_id):
+    """
+    Delete an Item
+    This endpoint will delete an Item based the id specified in the path
+    """
+    app.logger.info(
+        "Request to delete Item %s for Wishlist id: %s", (item_id, wishlist_id)
+    )
 
-# Place your REST API code here ...
+    # See if the item exists and delete it if it does
+    item = Item.find(item_id)
+    if item:
+        item.delete()
 
+    return make_response("", status.HTTP_204_NO_CONTENT)
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
