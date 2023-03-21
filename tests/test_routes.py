@@ -140,6 +140,23 @@ class TestWishlistService(TestCase):
         self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "account ID does not match")
 
 
+    def test_update_wishlist(self):
+        """It should Update an existing Wishlist"""
+        # create an Wishlist to update
+        test_wishlist = WishlistFactory()
+        resp = self.client.post(BASE_URL, json=test_wishlist.serialize())
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the wishlist
+        new_wishlist = resp.get_json()
+        new_wishlist["name"] = "Happy-Happy Joy-Joy"
+        new_wishlist_id = new_wishlist["id"]
+        resp = self.client.put(f"{BASE_URL}/{new_wishlist_id}", json=new_wishlist)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_wishlist = resp.get_json()
+        self.assertEqual(updated_wishlist["name"], "Happy-Happy Joy-Joy")
+
+
     def test_bad_request(self):
         """It should not Create when sending the wrong data"""
         resp = self.client.post(BASE_URL, json={"name": "not enough data"})
@@ -224,6 +241,48 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["wishlist_id"], wishlist.id)
         self.assertEqual(data["item_id"], item.item_id)
         self.assertEqual(data["count"], item.count)
+
+
+    #################################################################
+    #Update
+    #################################################################
+    def test_update_item(self):
+        """It should Update an item on a wishlist"""
+        # create a known item
+        wishlist = self._create_wishlists(1)[0]
+        item = ItemFactory()
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items",
+            json=item.serialize(),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        data = resp.get_json()
+        logging.debug(data)
+        item_id = data["id"]
+        #data["name"] = "XXXX"
+
+        # send the update back
+        resp = self.client.put(
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            json=data,
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        # retrieve it back
+        resp = self.client.get(
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        data = resp.get_json()
+        logging.debug(data)
+        self.assertEqual(data["id"], item_id)
+        self.assertEqual(data["wishlist_id"], wishlist.id)
+        #self.assertEqual(data["name"], "XXXX")
 
     #################################################################
     #Delete   

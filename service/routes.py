@@ -158,6 +158,34 @@ def create_items(wishlist_id):
 
     return make_response(jsonify(message), status.HTTP_201_CREATED)
 
+
+######################################################################
+# UPDATE AN EXISTING WISHLIST
+######################################################################
+@app.route("/wishlists/<int:wishlist_id>", methods=["PUT"])
+def update_wishlists(wishlist_id):
+    """
+    Update a Wishlist
+    This endpoint will update a Wishlist based the body that is posted
+    """
+    app.logger.info("Request to update account with id: %s", wishlist_id)
+    check_content_type("application/json")
+
+    # See if the wishlist exists and abort if it doesn't
+    wishlist = Wishlist.find(wishlist_id)
+    if not wishlist:
+        abort(
+            status.HTTP_404_NOT_FOUND, f"Wishlist with id '{wishlist_id}' was not found."
+        )
+
+    # Update from the json in the body of the request
+    wishlist.deserialize(request.get_json())
+    wishlist.id = wishlist_id
+    wishlist.update()
+
+    return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
+
+
 ######################################################################
 # DELETE A WISHLIST
 ######################################################################
@@ -175,6 +203,37 @@ def delete_wishlists(wishlist_id):
         wishlist.delete()
 
     return make_response("", status.HTTP_204_NO_CONTENT)
+
+
+
+######################################################################
+# UPDATE AN ITEM
+######################################################################
+@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["PUT"])
+def update_items(wishlist_id, item_id):
+    """
+    Update an Item
+    This endpoint will update an Item based the body that is posted
+    """
+    app.logger.info(
+        "Request to update Item %s for Wishlist id: %s", (item_id, wishlist_id)
+    )
+    check_content_type("application/json")
+
+    # See if the item exists and abort if it doesn't
+    item = Item.find(item_id)
+    if not item:
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Wishlist with id '{item_id}' could not be found.",
+        )
+    # Update from the json in the body of the request
+    item.deserialize(request.get_json())
+    item.id = item_id
+    item.update()
+
+    return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
+
 
 ######################################################################
 # DELETE AN ITEM

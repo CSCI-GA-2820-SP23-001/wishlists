@@ -44,7 +44,7 @@ class PersistentBase:
         """
         Creates a Wishlisht to the database
         """
-        logger.info("Creating %s", self.name)
+        logger.info("Creating %s", self.id)
         self.id = None  # id must be none to generate next primary key
         db.session.add(self)
         db.session.commit()
@@ -53,7 +53,7 @@ class PersistentBase:
         """
         Updates a Wishlist to the database
         """
-        logger.info("Updating %s", self.name)
+        logger.info("Updating %s", self.id)
         db.session.commit()
 
     def delete(self):
