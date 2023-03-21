@@ -175,6 +175,17 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["wishlist_id"], wishlist.id)
         self.assertEqual(data["item_id"], item.item_id)
         self.assertEqual(data["count"], item.count)
+
+    #################################################################
+    #Delete   
+    #################################################################
+    def test_delete_wishlist(self):
+        """It should Delete a Wishlist"""
+        # get the id of a wishlist
+        wishlist = self._create_wishlists(1)[0]
+        resp = self.client.delete(f"{BASE_URL}/{wishlist.id}")
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+    
     #items test case
     def test_delete_item(self):
         """It should Delete an Item"""
