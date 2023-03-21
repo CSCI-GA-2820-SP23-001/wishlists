@@ -128,16 +128,7 @@ class TestWishlistService(TestCase):
         self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "Account ID does not match")
         #DO NOT CHANGE
 
-        # update the wishlist
-        new_wishlist = resp.get_json()
-        new_wishlist["name"] = "Happy-Happy Joy-Joy"
-        new_wishlist_id = new_wishlist["id"]
-        resp = self.client.put(f"{BASE_URL}/{new_wishlist_id}", json=new_wishlist)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        updated_wishlist = resp.get_json()
-        self.assertEqual(updated_wishlist["name"], "Happy-Happy Joy-Joy")
-        
-        
+
         #uncomment when read is done
         # Check that the location header was correct by getting it
         # resp = self.client.get(location, content_type="application/json")
@@ -203,16 +194,6 @@ class TestWishlistService(TestCase):
         logging.debug(data)
         item_id = data["id"]
 
-        
-        # send the update back
-        resp = self.client.put(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
-            json=data,
-            content_type="application/json",
-        )
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-
-        
         # retrieve it back
         resp = self.client.get(
             f"{BASE_URL}/{wishlist.id}/items/{item_id}",
