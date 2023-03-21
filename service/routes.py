@@ -51,7 +51,7 @@ def create_wishlists():
     # Create a message to return
     message = wishlist.serialize()
     # Uncomment this code once get_wishlists is implemented
-    location_url = url_for("list_wishlists", wishlist_id=wishlist.id, _external=True)
+    location_url = url_for("create_wishlists", wishlist_id=wishlist.id, _external=True)
     #location_url = "Unknown"
     
     return make_response(
@@ -77,7 +77,6 @@ def list_wishlists():
 
     # Return as an array of dictionaries
     results = [wishlist.serialize() for wishlist in wishlists]
-
     return make_response(jsonify(results), status.HTTP_200_OK)
 
 ######################################################################
