@@ -60,7 +60,7 @@ def create_wishlists():
 
 
 ######################################################################
-# LIST ALL WISHLISTs
+# LIST ALL WISHLISTS
 ######################################################################
 @app.route("/wishlists", methods=["GET"])
 def list_wishlists():
@@ -77,10 +77,11 @@ def list_wishlists():
 
     # Return as an array of dictionaries
     results = [wishlist.serialize() for wishlist in wishlists]
+    
     return make_response(jsonify(results), status.HTTP_200_OK)
 
 ######################################################################
-# RETRIEVE AN WISHLIST
+# RETRIEVE A WISHLIST
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>", methods=["GET"])
 def get_wishlists(wishlist_id):
