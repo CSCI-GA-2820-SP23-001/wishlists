@@ -97,6 +97,7 @@ class Item(db.Model, PersistentBase):
     id = db.Column(db.Integer, primary_key=True)
     wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
     item_id = db.Column(db.Integer)
+    item_available = db.Column(db.Integer, default = 0)
 
     count = db.Column(db.Integer)
 
@@ -105,7 +106,7 @@ class Item(db.Model, PersistentBase):
         return f"<Item {self.item_id} id=[{self.id}] wishlist[{self.wishlist_id}]>"
 
     def __str__(self):
-        return f"{self.id}: {self.item_id}, {self.wishlist_id}, {self.count}"
+        return f"{self.id}: {self.item_id}, {self.wishlist_id}, {self.item_available}, {self.count}"
 
     def serialize(self) -> dict:
         """Converts an Item into a dictionary"""
@@ -113,6 +114,7 @@ class Item(db.Model, PersistentBase):
             "id": self.id,
             "wishlist_id": self.wishlist_id,
             "item_id": self.item_id,
+            "item_available": self.item_available,
             "count": self.count
         }
 
@@ -127,6 +129,7 @@ class Item(db.Model, PersistentBase):
             self.id = data["id"]
             self.wishlist_id = data["wishlist_id"]
             self.item_id = data["item_id"]
+            self.item_available = data["item_available"]
             self.count = data["count"]
         except KeyError as error:
             raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
