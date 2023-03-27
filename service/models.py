@@ -97,8 +97,7 @@ class Item(db.Model, PersistentBase):
     id = db.Column(db.Integer, primary_key=True)
     wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
     item_id = db.Column(db.Integer)
-    item_available = db.Column(db.Integer, default = 0)
-
+    item_available = db.column(db.Boolean)
     count = db.Column(db.Integer)
 
 

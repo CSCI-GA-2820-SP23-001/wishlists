@@ -247,7 +247,7 @@ class TestWishlistService(TestCase):
     #Update
     #################################################################
     def test_update_item(self):
-        """It should Update an item on a wishlist"""
+        """It should Update an item in a wishlist"""
         # create a known item
         wishlist = self._create_wishlists(1)[0]
         item = ItemFactory()
