@@ -128,8 +128,14 @@ class Item(db.Model, PersistentBase):
             self.id = data["id"]
             self.wishlist_id = data["wishlist_id"]
             self.item_id = data["item_id"]
-            self.item_available = data["item_available"]
             self.count = data["count"]
+            if isinstance(data["item_available"], bool):
+                self.item_available = data["item_available"]
+            else:
+                raise DataValidationError(
+                    "Invalid type for boolean [item_available]: "
+                    + str(type(data["item_available"]))
+                )
         except KeyError as error:
             raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
         except TypeError as error:
