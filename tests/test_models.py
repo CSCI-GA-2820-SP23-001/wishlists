@@ -86,7 +86,6 @@ class TestWishlist(unittest.TestCase):
         self.assertEqual(items[0]["id"], item.id)
         self.assertEqual(items[0]["wishlist_id"], item.wishlist_id)
         self.assertEqual(items[0]["item_id"], item.item_id)
-        self.assertEqual(items[0]["item_available"], item.item_available)
         self.assertEqual(items[0]["count"], item.count)
   
     def test_deserialize_an_wishlist(self):

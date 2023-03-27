@@ -97,7 +97,7 @@ class Item(db.Model, PersistentBase):
     id = db.Column(db.Integer, primary_key=True)
     wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
     item_id = db.Column(db.Integer)
-    item_available = db.column(db.Boolean)
+    item_available = db.Column(db.Boolean(), nullable=False, default=False)
     count = db.Column(db.Integer)
 
 
@@ -136,6 +136,7 @@ class Item(db.Model, PersistentBase):
                     "Invalid type for boolean [item_available]: "
                     + str(type(data["item_available"]))
                 )
+            self.count = data["count"]
         except KeyError as error:
             raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
         except TypeError as error:
