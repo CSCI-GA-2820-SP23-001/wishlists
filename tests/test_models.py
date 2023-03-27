@@ -85,7 +85,7 @@ class TestWishlist(unittest.TestCase):
         items = serial_wishlist["items"]
         self.assertEqual(items[0]["id"], item.id)
         self.assertEqual(items[0]["wishlist_id"], item.wishlist_id)
-        self.assertEqual(items[0]["item_id"], item.item_id)
+        self.assertEqual(items[0]["sku"], item.sku)
         self.assertEqual(items[0]["count"], item.count)
   
     def test_deserialize_an_wishlist(self):
@@ -134,7 +134,7 @@ class TestWishlist(unittest.TestCase):
         self.assertEqual(len(wishlists), 1)
 
         new_wishlist = Wishlist.find(wishlist.id)
-        self.assertEqual(new_wishlist.items[0].item_id, item.item_id)
+        self.assertEqual(new_wishlist.items[0].sku, item.sku)
 
         item2 = ItemFactory(wishlist=wishlist)
         wishlist.items.append(item2)
@@ -142,7 +142,7 @@ class TestWishlist(unittest.TestCase):
 
         new_wishlist = Wishlist.find(wishlist.id)
         self.assertEqual(len(new_wishlist.items), 2)
-        self.assertEqual(new_wishlist.items[1].item_id, item2.item_id)
+        self.assertEqual(new_wishlist.items[1].sku, item2.sku)
 
     def test_update_wishlist_item(self):
         """It should Update an wishlists item"""
@@ -161,15 +161,15 @@ class TestWishlist(unittest.TestCase):
         wishlist = Wishlist.find(wishlist.id)
         old_item = wishlist.items[0]
         print("%r", old_item)
-        self.assertEqual(old_item.item_id, item.item_id)
-        # Change the item_id
-        old_item.item_id = 10
+        self.assertEqual(old_item.sku, item.sku)
+        # Change the sku
+        old_item.sku = 10
         wishlist.update()
 
         # Fetch it back again
         wishlist = Wishlist.find(wishlist.id)
         item = wishlist.items[0]
-        self.assertEqual(item.item_id, 10)
+        self.assertEqual(item.sku, 10)
 
     def test_delete_wishlist_item(self):
         """It should Delete an wishlists item"""

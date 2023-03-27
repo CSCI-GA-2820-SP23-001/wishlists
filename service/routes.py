@@ -104,22 +104,22 @@ def get_wishlists(wishlist_id):
 ######################################################################
 # READ AN ITEM FROM A WISHLIST
 ######################################################################
-@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["GET"])
-def get_items(wishlist_id, item_id):
+@app.route("/wishlists/<int:wishlist_id>/items/<int:id>", methods=["GET"])
+def get_items(wishlist_id, id):
     """
     Get an Item
     This endpoint returns just an item
     """
     app.logger.info(
-        "Request to retrieve Item %s for Wishlist id: %s", (item_id, wishlist_id)
+        "Request to retrieve Item %s for Wishlist id: %s", (id, wishlist_id)
     )
 
     # See if the item exists and abort if it doesn't
-    item = Item.find(item_id)
+    item = Item.find(id)
     if not item:
         abort(
             status.HTTP_404_NOT_FOUND,
-            f"Wishlist with id '{item_id}' could not be found.",
+            f"Wishlist with id '{id}' could not be found.",
         )
 
     return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
@@ -209,27 +209,27 @@ def delete_wishlists(wishlist_id):
 ######################################################################
 # UPDATE AN ITEM
 ######################################################################
-@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["PUT"])
-def update_items(wishlist_id, item_id):
+@app.route("/wishlists/<int:wishlist_id>/items/<int:id>", methods=["PUT"])
+def update_items(wishlist_id, id):
     """
     Update an Item
     This endpoint will update an Item based the body that is posted
     """
     app.logger.info(
-        "Request to update Item %s for Wishlist id: %s", (item_id, wishlist_id)
+        "Request to update Item %s for Wishlist id: %s", (id, wishlist_id)
     )
     check_content_type("application/json")
 
     # See if the item exists and abort if it doesn't
-    item = Item.find(item_id)
+    item = Item.find(id)
     if not item:
         abort(
             status.HTTP_404_NOT_FOUND,
-            f"Wishlist with id '{item_id}' could not be found.",
+            f"Wishlist with id '{id}' could not be found.",
         )
     # Update from the json in the body of the request
     item.deserialize(request.get_json())
-    item.id = item_id
+    item.id = id
     item.update()
 
     return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
@@ -238,18 +238,18 @@ def update_items(wishlist_id, item_id):
 ######################################################################
 # DELETE AN ITEM
 ######################################################################
-@app.route("/wishlists/<int:wishlist_id>/items/<int:item_id>", methods=["DELETE"])
-def delete_items(wishlist_id, item_id):
+@app.route("/wishlists/<int:wishlist_id>/items/<int:id>", methods=["DELETE"])
+def delete_items(wishlist_id, id):
     """
     Delete an Item
     This endpoint will delete an Item based the id specified in the path
     """
     app.logger.info(
-        "Request to delete Item %s for Wishlist id: %s", (item_id, wishlist_id)
+        "Request to delete Item %s for Wishlist id: %s", (id, wishlist_id)
     )
 
     # See if the item exists and delete it if it does
-    item = Item.find(item_id)
+    item = Item.find(id)
     if item:
         item.delete()
 
