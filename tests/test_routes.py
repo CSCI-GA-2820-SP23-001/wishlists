@@ -242,6 +242,30 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["item_id"], item.item_id)
         self.assertEqual(data["count"], item.count)
 
+        def test_get_item_list(self):
+            """It should Get a list of Items"""
+            # add two items to account
+            account = self._create_accounts(1)[0]
+            item_list = ItemFactory.create_batch(2)
+
+            # Create item 1
+            resp = self.client.post(
+                f"{BASE_URL}/{account.id}/items", json=item_list[0].serialize()
+            )
+            self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+            # Create item 2
+            resp = self.client.post(
+                f"{BASE_URL}/{account.id}/items", json=item_list[1].serialize()
+            )
+            self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+            # get the list back and make sure there are 2
+            resp = self.client.get(f"{BASE_URL}/{account.id}/items")
+            self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+            data = resp.get_json()
+            self.assertEqual(len(data), 2)
 
     #################################################################
     #Update
