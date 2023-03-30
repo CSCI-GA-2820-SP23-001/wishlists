@@ -13,12 +13,15 @@ logger = logging.getLogger("flask.app")
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
+
 class DataValidationError(Exception):
     """Used for an data validation errors when deserializing"""
+
 
 def init_db(app):
     """Initialize the SQLAlchemy app"""
     Wishlist.init_db(app)
+
 
 ######################################################################
 #  P E R S I S T E N T   B A S E   M O D E L
@@ -81,6 +84,7 @@ class PersistentBase:
         logger.info("Processing lookup for id %s ...", by_id)
         return cls.query.get(by_id)
 
+
 ######################################################################
 #  I T E M   M O D E L
 ######################################################################
@@ -98,7 +102,9 @@ class Item(db.Model, PersistentBase):
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
+    wishlist_id = db.Column(
+        db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False
+    )
     sku = db.Column(db.Integer)
     item_available = db.Column(db.Boolean(), nullable=False, default=False)
     count = db.Column(db.Integer)
@@ -116,7 +122,7 @@ class Item(db.Model, PersistentBase):
             "wishlist_id": self.wishlist_id,
             "sku": self.sku,
             "item_available": self.item_available,
-            "count": self.count
+            "count": self.count,
         }
 
     def deserialize(self, data: dict) -> None:
@@ -140,13 +146,16 @@ class Item(db.Model, PersistentBase):
                 )
             self.count = data["count"]
         except KeyError as error:
-            raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
+            raise DataValidationError(
+                "Invalid Item: missing " + error.args[0]
+            ) from error
         except TypeError as error:
             raise DataValidationError(
                 "Invalid Item: body of request contained "
                 "bad or no data " + error.args[0]
             ) from error
         return self
+
 
 ######################################################################
 #  W I S H L I S T   M O D E L
@@ -203,7 +212,9 @@ class Wishlist(db.Model, PersistentBase):
                 item.deserialize(json_items)
                 self.items.append(item)
         except KeyError as error:
-            raise DataValidationError("Invalid Wishlist: missing " + error.args[0]) from error
+            raise DataValidationError(
+                "Invalid Wishlist: missing " + error.args[0]
+            ) from error
         except TypeError as error:
             raise DataValidationError(
                 "Invalid Wishlist: body of request contained "
