@@ -13,15 +13,12 @@ logger = logging.getLogger("flask.app")
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
-
 class DataValidationError(Exception):
     """Used for an data validation errors when deserializing"""
-
 
 def init_db(app):
     """Initialize the SQLAlchemy app"""
     Wishlist.init_db(app)
-
 
 ######################################################################
 #  P E R S I S T E N T   B A S E   M O D E L
@@ -84,7 +81,6 @@ class PersistentBase:
         logger.info("Processing lookup for id %s ...", by_id)
         return cls.query.get(by_id)
 
-
 ######################################################################
 #  I T E M   M O D E L
 ######################################################################
@@ -106,7 +102,6 @@ class Item(db.Model, PersistentBase):
     sku = db.Column(db.Integer)
     item_available = db.Column(db.Boolean(), nullable=False, default=False)
     count = db.Column(db.Integer)
-
 
     def __repr__(self):
         return f"<Item {self.id}>"
@@ -152,7 +147,6 @@ class Item(db.Model, PersistentBase):
                 "bad or no data " + error.args[0]
             ) from error
         return self
-
 
 ######################################################################
 #  W I S H L I S T   M O D E L
