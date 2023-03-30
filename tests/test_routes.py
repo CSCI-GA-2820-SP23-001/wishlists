@@ -207,7 +207,8 @@ class TestWishlistService(TestCase):
         data = resp.get_json()
         logging.debug(data)
         self.assertEqual(data["wishlist_id"], wishlist.id)
-        self.assertEqual(data["item_id"], item.item_id)
+        self.assertEqual(data["sku"], item.sku)
+        self.assertEqual(data["item_available"], item.item_available)
         self.assertEqual(data["count"], item.count)
     
     #################################################################
@@ -227,11 +228,11 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        item_id = data["id"]
+        id = data["id"]
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            f"{BASE_URL}/{wishlist.id}/items/{id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -239,7 +240,8 @@ class TestWishlistService(TestCase):
         data = resp.get_json()
         logging.debug(data)
         self.assertEqual(data["wishlist_id"], wishlist.id)
-        self.assertEqual(data["item_id"], item.item_id)
+        self.assertEqual(data["sku"], item.sku)
+        self.assertEqual(data["item_available"], item.item_available)
         self.assertEqual(data["count"], item.count)
 
         def test_get_item_list(self):
@@ -271,7 +273,7 @@ class TestWishlistService(TestCase):
     #Update
     #################################################################
     def test_update_item(self):
-        """It should Update an item on a wishlist"""
+        """It should Update an item in a wishlist"""
         # create a known item
         wishlist = self._create_wishlists(1)[0]
         item = ItemFactory()
@@ -284,12 +286,12 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        item_id = data["id"]
+        id = data["id"]
         #data["name"] = "XXXX"
 
         # send the update back
         resp = self.client.put(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            f"{BASE_URL}/{wishlist.id}/items/{id}",
             json=data,
             content_type="application/json",
         )
@@ -297,14 +299,14 @@ class TestWishlistService(TestCase):
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            f"{BASE_URL}/{wishlist.id}/items/{id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         data = resp.get_json()
         logging.debug(data)
-        self.assertEqual(data["id"], item_id)
+        self.assertEqual(data["id"], id)
         self.assertEqual(data["wishlist_id"], wishlist.id)
         #self.assertEqual(data["name"], "XXXX")
 
@@ -331,18 +333,18 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         data = resp.get_json()
         logging.debug(data)
-        item_id = data["id"]
+        id = data["id"]
 
         # send delete request
         resp = self.client.delete(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            f"{BASE_URL}/{wishlist.id}/items/{id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
         # retrieve it back and make sure item is not there
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
+            f"{BASE_URL}/{wishlist.id}/items/{id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)

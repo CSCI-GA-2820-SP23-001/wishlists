@@ -91,29 +91,38 @@ class PersistentBase:
 class Item(db.Model, PersistentBase):
     """
     Class that represents an Item
+
+    Key Descriptions:
+    id - primary key for the table, this is a unique identifier of an item
+    wishlist_id - foreign key, this is a unique identifier to link an item to a wishlist
+    sku - items with the same id may have different colors or other features, this sku helps differentiate these items
+    item_available - Up to date information on whether an item is available for purchase by a customer
+    count - a counting variable for each item that keeps track of how many of each item is in the wishlist
     """
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    wishlist_id = db.Column(db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False)
-    item_id = db.Column(db.Integer)
-
+    wishlist_id = db.Column(
+        db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False
+    )
+    sku = db.Column(db.Integer)
+    item_available = db.Column(db.Boolean(), nullable=False, default=False)
     count = db.Column(db.Integer)
 
-
     def __repr__(self):
-        return f"<Item {self.item_id} id=[{self.id}] wishlist[{self.wishlist_id}]>"
+        return f"<Item {self.id}>"
 
     def __str__(self):
-        return f"{self.id}: {self.item_id}, {self.wishlist_id}, {self.count}"
+        return f"{self.id}: {self.id}, {self.wishlist_id}, {self.item_available}, {self.count}"
 
     def serialize(self) -> dict:
         """Converts an Item into a dictionary"""
         return {
             "id": self.id,
             "wishlist_id": self.wishlist_id,
-            "item_id": self.item_id,
-            "count": self.count
+            "sku": self.sku,
+            "item_available": self.item_available,
+            "count": self.count,
         }
 
     def deserialize(self, data: dict) -> None:
@@ -126,10 +135,20 @@ class Item(db.Model, PersistentBase):
         try:
             self.id = data["id"]
             self.wishlist_id = data["wishlist_id"]
-            self.item_id = data["item_id"]
+            self.sku = data["sku"]
+            self.count = data["count"]
+            if isinstance(data["item_available"], bool):
+                self.item_available = data["item_available"]
+            else:
+                raise DataValidationError(
+                    "Invalid type for boolean [item_available]: "
+                    + str(type(data["item_available"]))
+                )
             self.count = data["count"]
         except KeyError as error:
-            raise DataValidationError("Invalid Item: missing " + error.args[0]) from error
+            raise DataValidationError(
+                "Invalid Item: missing " + error.args[0]
+            ) from error
         except TypeError as error:
             raise DataValidationError(
                 "Invalid Item: body of request contained "
@@ -144,6 +163,12 @@ class Item(db.Model, PersistentBase):
 class Wishlist(db.Model, PersistentBase):
     """
     Class that represents an Wishlist
+
+    Key Descriptions:
+    id - primary key for the table, this is a unique identifier of a wishlist
+    name - the name of a wishlist
+    account_id - account number of the creator of the wishlist
+    items - foreign key, this is a unique identifier to link an item to a wishlist
     """
 
     app = None
@@ -187,7 +212,9 @@ class Wishlist(db.Model, PersistentBase):
                 item.deserialize(json_items)
                 self.items.append(item)
         except KeyError as error:
-            raise DataValidationError("Invalid Wishlist: missing " + error.args[0]) from error
+            raise DataValidationError(
+                "Invalid Wishlist: missing " + error.args[0]
+            ) from error
         except TypeError as error:
             raise DataValidationError(
                 "Invalid Wishlist: body of request contained "
