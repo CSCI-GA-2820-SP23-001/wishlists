@@ -33,7 +33,6 @@ class WishlistFactory(factory.Factory):
     id = factory.Sequence(lambda n: n)
     name = factory.Faker("name")
     account_id = factory.Sequence(lambda n: n)
-
     # the many side of relationships can be a little wonky in factory boy:
     # https://factoryboy.readthedocs.io/en/latest/recipes.html#simple-many-to-many-relationship
 

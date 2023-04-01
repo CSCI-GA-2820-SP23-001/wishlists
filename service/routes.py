@@ -10,7 +10,7 @@ from service.models import Wishlist, Item  # , PersistentBase
 from . import app  # Import Flask application
 
 # Import Flask application
-from . import app
+# from . import app
 
 
 ######################################################################
