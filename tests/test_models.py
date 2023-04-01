@@ -60,7 +60,6 @@ class TestWishlist(unittest.TestCase):
         self.assertEqual(wishlist.name, fake_wishlist.name)
         self.assertEqual(wishlist.account_id, fake_wishlist.account_id)
 
-
     def test_add_a_wishlist(self):
         """It should Create an wishlist and add it to the database"""
         wishlists = Wishlist.all()
@@ -87,7 +86,7 @@ class TestWishlist(unittest.TestCase):
         self.assertEqual(items[0]["wishlist_id"], item.wishlist_id)
         self.assertEqual(items[0]["sku"], item.sku)
         self.assertEqual(items[0]["count"], item.count)
-  
+
     def test_deserialize_an_wishlist(self):
         """It should Deserialize an wishlist"""
         wishlist = WishlistFactory()
@@ -98,7 +97,6 @@ class TestWishlist(unittest.TestCase):
         new_wishlist.deserialize(serial_wishlist)
         self.assertEqual(new_wishlist.name, wishlist.name)
         self.assertEqual(new_wishlist.account_id, wishlist.account_id)
-
 
     def test_deserialize_with_key_error(self):
         """It should not Deserialize an wishlist with a KeyError"""
