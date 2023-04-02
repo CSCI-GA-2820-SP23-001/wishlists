@@ -9,10 +9,7 @@ from service.common import status  # HTTP Status Codes
 from service.models import Wishlist, Item  # , PersistentBase
 from . import app  # Import Flask application
 
-# Import Flask application
-# from . import app
 # pylint: disable=invalid-name, C0103, W0622
-
 
 ######################################################################
 # GET INDEX

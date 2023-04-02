@@ -12,7 +12,7 @@ from service.common import status  # HTTP Status Codes
 from service.models import db, Wishlist, init_db
 from service import app
 
-# pylint: disable=invalid-name, C0103, W0622
+
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
@@ -228,11 +228,11 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
+        item_id = data["id"]
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -289,12 +289,12 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
+        item_id = data["id"]
         # data["name"] = "XXXX"
 
         # send the update back
         resp = self.client.put(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             json=data,
             content_type="application/json",
         )
@@ -302,14 +302,14 @@ class TestWishlistService(TestCase):
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         data = resp.get_json()
         logging.debug(data)
-        self.assertEqual(data["id"], id)
+        self.assertEqual(data["id"], item_id)
         self.assertEqual(data["wishlist_id"], wishlist.id)
         # self.assertEqual(data["name"], "XXXX")
 
@@ -336,18 +336,18 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
+        item_id = data["id"]
 
         # send delete request
         resp = self.client.delete(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
         # retrieve it back and make sure item is not there
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
