@@ -11,6 +11,7 @@ from . import app  # Import Flask application
 
 # Import Flask application
 # from . import app
+# pylint: disable=invalid-name, C0103, W0622
 
 
 ######################################################################
@@ -88,7 +89,7 @@ def list_wishlists():
 # RETRIEVE A WISHLIST
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>", methods=["GET"])
-def get_wishlists(wishlist_id):
+def get_wishlists(wishlist_id):  # pylint: disable=invalid-name, C0103
     """
     Retrieve a single Wishlist
     This endpoint will return an Wishlist based on it's id

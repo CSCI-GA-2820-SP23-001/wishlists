@@ -31,7 +31,7 @@ class PersistentBase:
     """Base class added persistent methods"""
 
     def __init__(self):
-        self.id = None  # pylint: disable=invalid-name
+        self.id = None  # pylint: disable=invalid-name, C0103
 
     @abstractmethod
     def serialize(self) -> dict:
@@ -102,7 +102,7 @@ class Item(db.Model, PersistentBase):
     """
 
     # Table Schema
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # pylint: disable=invalid-name, C0103
     wishlist_id = db.Column(
         db.Integer, db.ForeignKey("wishlist.id", ondelete="CASCADE"), nullable=False
     )
@@ -175,7 +175,7 @@ class Wishlist(db.Model, PersistentBase):
     app = None
 
     # Table Schema
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # pylint: disable=invalid-name, C0103
     account_id = db.Column(db.Integer)
     name = db.Column(db.String(64))
     items = db.relationship("Item", backref="wishlist", passive_deletes=True)
