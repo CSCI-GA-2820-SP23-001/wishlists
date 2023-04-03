@@ -194,7 +194,7 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["name"], wishlist.name)
 
     def test_add_item(self):
-        """It should Add an item to an wishlist"""
+        """It should Add an item to a wishlist"""
         wishlist = self._create_wishlists(1)[0]
         item = ItemFactory()
         resp = self.client.post(
@@ -246,30 +246,30 @@ class TestWishlistService(TestCase):
     # Neal Comment - unsure of the purpose of this one, but it's not up to date and seems to have slipped through
     # by being too indented and never called
     # to modify: highlight all -> control/command+K+U uncomment all
-    # def test_get_item_list(self):
-    #     """It should Get a list of Items"""
-    #     # add two items to account
-    #     account = self._create_accounts(1)[0]
-    #     item_list = ItemFactory.create_batch(2)
+    def test_get_item_list(self):
+        """It should Get a list of Items"""
+        # add two items to wishlist
+        wishlist = self._create_wishlists(1)[0]
+        item_list = ItemFactory.create_batch(2)
 
-    #     # Create item 1
-    #     resp = self.client.post(
-    #         f"{BASE_URL}/{account.id}/items", json=item_list[0].serialize()
-    #     )
-    #     self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        # Create item 1
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[0].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-    #     # Create item 2
-    #     resp = self.client.post(
-    #         f"{BASE_URL}/{account.id}/items", json=item_list[1].serialize()
-    #     )
-    #     self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        # Create item 2
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[1].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-    #     # get the list back and make sure there are 2
-    #     resp = self.client.get(f"{BASE_URL}/{account.id}/items")
-    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        # get the list back and make sure there are 2
+        resp = self.client.get(f"{BASE_URL}/{wishlist.id}/items")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-    #     data = resp.get_json()
-    #     self.assertEqual(len(data), 2)
+        data = resp.get_json()
+        self.assertEqual(len(data), 2)
 
     #################################################################
     # Update
