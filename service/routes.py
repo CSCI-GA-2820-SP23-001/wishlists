@@ -4,9 +4,9 @@ My Service
 Describe what your service does here
 """
 
-from flask import jsonify, request, url_for, make_response, abort  # , Flask
+from flask import jsonify, request, url_for, make_response, abort
 from service.common import status  # HTTP Status Codes
-from service.models import Wishlist, Item  # , PersistentBase
+from service.models import Wishlist, Item
 
 # Import Flask application
 from . import app
