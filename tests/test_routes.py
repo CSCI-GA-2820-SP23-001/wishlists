@@ -7,11 +7,10 @@ Test cases can be run with the following:
 import os
 import logging
 from unittest import TestCase
-from tests.factories import WishlistFactory, ItemFactory
 from service import app
+from service.models import db, init_db, Wishlist
 from service.common import status  # HTTP Status Codes
-from service.models import db, Wishlist, init_db
-
+from tests.factories import WishlistFactory, ItemFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
