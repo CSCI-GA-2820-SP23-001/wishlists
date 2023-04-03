@@ -4,13 +4,14 @@ My Service
 Describe what your service does here
 """
 
-from flask import Flask, jsonify, request, url_for, make_response, abort
+from flask import jsonify, request, url_for, make_response, abort
 from service.common import status  # HTTP Status Codes
-from service.models import PersistentBase, Wishlist, Item
-from . import app  # Import Flask application
+from service.models import Wishlist, Item
 
 # Import Flask application
 from . import app
+
+# pylint: disable=invalid-name, C0103, W0622
 
 
 ######################################################################
@@ -88,7 +89,7 @@ def list_wishlists():
 # RETRIEVE A WISHLIST
 ######################################################################
 @app.route("/wishlists/<int:wishlist_id>", methods=["GET"])
-def get_wishlists(wishlist_id):
+def get_wishlists(wishlist_id):  # pylint: disable=invalid-name, C0103
     """
     Retrieve a single Wishlist
     This endpoint will return an Wishlist based on it's id

@@ -15,9 +15,8 @@
 """
 Test Factory to make fake objects for testing
 """
-from datetime import date
 import factory
-from factory.fuzzy import FuzzyChoice, FuzzyDate
+from factory.fuzzy import FuzzyChoice  # , FuzzyDate
 from service.models import Wishlist, Item
 
 
@@ -27,17 +26,19 @@ class WishlistFactory(factory.Factory):
     # pylint: disable=too-few-public-methods
     class Meta:
         """Persistent class"""
+
         model = Wishlist
 
     id = factory.Sequence(lambda n: n)
     name = factory.Faker("name")
     account_id = factory.Sequence(lambda n: n)
-
     # the many side of relationships can be a little wonky in factory boy:
     # https://factoryboy.readthedocs.io/en/latest/recipes.html#simple-many-to-many-relationship
 
     @factory.post_generation
-    def items(self, create, extracted, **kwargs):   # pylint: disable=method-hidden, unused-argument
+    def items(
+        self, create, extracted, **kwargs
+    ):  # pylint: disable=method-hidden, unused-argument
         """Creates the items list"""
         if not create:
             return
@@ -52,6 +53,7 @@ class ItemFactory(factory.Factory):
     # pylint: disable=too-few-public-methods
     class Meta:
         """Persistent class"""
+
         model = Item
 
     id = factory.Sequence(lambda n: n)
@@ -60,4 +62,3 @@ class ItemFactory(factory.Factory):
     count = FuzzyChoice(choices=[1, 2, 3, 4])
     wishlist_id = None
     wishlist = factory.SubFactory(WishlistFactory)
-

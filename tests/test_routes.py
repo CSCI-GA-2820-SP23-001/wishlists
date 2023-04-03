@@ -1,5 +1,3 @@
-
-
 """
 <your resource name> API Service Test Suite
 Test cases can be run with the following:
@@ -9,16 +7,17 @@ Test cases can be run with the following:
 import os
 import logging
 from unittest import TestCase
-from tests.factories import WishlistFactory, ItemFactory
+from service import app
+from service.models import db, init_db, Wishlist
 from service.common import status  # HTTP Status Codes
-from service.models import db, Wishlist, init_db
-from service.routes import app
+from tests.factories import WishlistFactory, ItemFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
 BASE_URL = "/wishlists"
+
 
 ######################################################################
 #  T E S T   C A S E S
@@ -49,7 +48,7 @@ class TestWishlistService(TestCase):
     def tearDown(self):
         """Runs once after each test case"""
         db.session.remove()
-    
+
     ######################################################################
     #  H E L P E R   M E T H O D S
     ######################################################################
@@ -69,13 +68,13 @@ class TestWishlistService(TestCase):
             wishlist.id = new_wishlist["id"]
             wishlists.append(wishlist)
         return wishlists
-    
+
     ######################################################################
     #  W I S H L I S T   T E S T   C A S E S
     ######################################################################
-    
+
     #################################################################
-    #Error Handling
+    # Error Handling
     #################################################################
 
     def test_unsupported_media_type(self):
@@ -85,8 +84,8 @@ class TestWishlistService(TestCase):
             BASE_URL, json=wishlist.serialize(), content_type="test/html"
         )
         self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-    
-    #test to hit 409 errors
+
+    # test to hit 409 errors
     # def test_conflict(self):
     #     """It should not allow a service transfer request"""
     #     wishlist = WishlistFactory()
@@ -99,14 +98,13 @@ class TestWishlistService(TestCase):
     #     self.assertEqual(resp.status_code, status.HTTP_409_CONFLICT)
 
     #################################################################
-    #Create
+    # Create
     #################################################################
 
     def test_index(self):
         """It should call the Home Page"""
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-
 
     def test_create_wishlist(self):
         """It should Create a new Wishlist"""
@@ -116,7 +114,7 @@ class TestWishlistService(TestCase):
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        #UNCOMMENT WHEN READ IS DONE
+        # UNCOMMENT WHEN READ IS DONE
         # Make sure location header is set
         location = resp.headers.get("Location", None)
         self.assertIsNotNone(location)
@@ -125,20 +123,22 @@ class TestWishlistService(TestCase):
         new_wishlist = resp.get_json()
         self.assertEqual(new_wishlist["name"], wishlist.name, "Name does not match")
         self.assertEqual(new_wishlist["items"], wishlist.items, "Items do not match")
-        #DO NOT CHANGE THIS ACCOUNT!!!!
-        self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "Account ID does not match")
-        #DO NOT CHANGE
+        # DO NOT CHANGE THIS ACCOUNT!!!!
+        self.assertEqual(
+            new_wishlist["account_id"], wishlist.account_id, "Account ID does not match"
+        )
+        # DO NOT CHANGE
 
-
-        #uncomment when read is done
-        #Check that the location header was correct by getting it
+        # uncomment when read is done
+        # Check that the location header was correct by getting it
         resp = self.client.get(location, content_type="application/json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         new_wishlist = resp.get_json()
         self.assertEqual(new_wishlist["name"], wishlist.name, "Names do not match")
         self.assertEqual(new_wishlist["items"], wishlist.items, "Item does not match")
-        self.assertEqual(new_wishlist["account_id"], wishlist.account_id, "account ID does not match")
-
+        self.assertEqual(
+            new_wishlist["account_id"], wishlist.account_id, "account ID does not match"
+        )
 
     def test_update_wishlist(self):
         """It should Update an existing Wishlist"""
@@ -155,7 +155,6 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_wishlist = resp.get_json()
         self.assertEqual(updated_wishlist["name"], "Happy-Happy Joy-Joy")
-
 
     def test_bad_request(self):
         """It should not Create when sending the wrong data"""
@@ -210,9 +209,9 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["sku"], item.sku)
         self.assertEqual(data["item_available"], item.item_available)
         self.assertEqual(data["count"], item.count)
-    
+
     #################################################################
-    #Read
+    # Read
     #################################################################
     def test_get_item(self):
         """It should Get an item from an wishlist"""
@@ -228,11 +227,11 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
+        item_id = data["id"]
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -244,33 +243,36 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["item_available"], item.item_available)
         self.assertEqual(data["count"], item.count)
 
-        def test_get_item_list(self):
-            """It should Get a list of Items"""
-            # add two items to account
-            account = self._create_accounts(1)[0]
-            item_list = ItemFactory.create_batch(2)
+    # Neal Comment - unsure of the purpose of this one, but it's not up to date and seems to have slipped through
+    # by being too indented and never called
+    # to modify: highlight all -> control/command+K+U uncomment all
+    # def test_get_item_list(self):
+    #     """It should Get a list of Items"""
+    #     # add two items to account
+    #     account = self._create_accounts(1)[0]
+    #     item_list = ItemFactory.create_batch(2)
 
-            # Create item 1
-            resp = self.client.post(
-                f"{BASE_URL}/{account.id}/items", json=item_list[0].serialize()
-            )
-            self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+    #     # Create item 1
+    #     resp = self.client.post(
+    #         f"{BASE_URL}/{account.id}/items", json=item_list[0].serialize()
+    #     )
+    #     self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-            # Create item 2
-            resp = self.client.post(
-                f"{BASE_URL}/{account.id}/items", json=item_list[1].serialize()
-            )
-            self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+    #     # Create item 2
+    #     resp = self.client.post(
+    #         f"{BASE_URL}/{account.id}/items", json=item_list[1].serialize()
+    #     )
+    #     self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-            # get the list back and make sure there are 2
-            resp = self.client.get(f"{BASE_URL}/{account.id}/items")
-            self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    #     # get the list back and make sure there are 2
+    #     resp = self.client.get(f"{BASE_URL}/{account.id}/items")
+    #     self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-            data = resp.get_json()
-            self.assertEqual(len(data), 2)
+    #     data = resp.get_json()
+    #     self.assertEqual(len(data), 2)
 
     #################################################################
-    #Update
+    # Update
     #################################################################
     def test_update_item(self):
         """It should Update an item in a wishlist"""
@@ -286,12 +288,12 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
-        #data["name"] = "XXXX"
+        item_id = data["id"]
+        # data["name"] = "XXXX"
 
         # send the update back
         resp = self.client.put(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             json=data,
             content_type="application/json",
         )
@@ -299,19 +301,19 @@ class TestWishlistService(TestCase):
 
         # retrieve it back
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         data = resp.get_json()
         logging.debug(data)
-        self.assertEqual(data["id"], id)
+        self.assertEqual(data["id"], item_id)
         self.assertEqual(data["wishlist_id"], wishlist.id)
-        #self.assertEqual(data["name"], "XXXX")
+        # self.assertEqual(data["name"], "XXXX")
 
     #################################################################
-    #Delete   
+    # Delete
     #################################################################
     def test_delete_wishlist(self):
         """It should Delete a Wishlist"""
@@ -320,7 +322,7 @@ class TestWishlistService(TestCase):
         resp = self.client.delete(f"{BASE_URL}/{wishlist.id}")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
-    #items test case
+    # items test case
     def test_delete_item(self):
         """It should Delete an Item"""
         wishlist = self._create_wishlists(1)[0]
@@ -333,18 +335,18 @@ class TestWishlistService(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         data = resp.get_json()
         logging.debug(data)
-        id = data["id"]
+        item_id = data["id"]
 
         # send delete request
         resp = self.client.delete(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 
         # retrieve it back and make sure item is not there
         resp = self.client.get(
-            f"{BASE_URL}/{wishlist.id}/items/{id}",
+            f"{BASE_URL}/{wishlist.id}/items/{item_id}",
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
