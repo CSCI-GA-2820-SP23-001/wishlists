@@ -8,9 +8,9 @@ import os
 import logging
 from unittest import TestCase
 from tests.factories import WishlistFactory, ItemFactory
+from service import app
 from service.common import status  # HTTP Status Codes
 from service.models import db, Wishlist, init_db
-from service import app
 
 
 DATABASE_URI = os.getenv(
