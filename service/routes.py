@@ -12,6 +12,13 @@ from . import app  # Import Flask application
 # Import Flask application
 from . import app
 
+############################################################
+# Health Endpoint
+############################################################
+@app.route("/health")
+def health():
+    """Health Status"""
+    return {"status": 'OK'}, status.HTTP_200_OK
 
 ######################################################################
 # GET INDEX
