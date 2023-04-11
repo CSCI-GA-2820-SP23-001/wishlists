@@ -25,7 +25,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: nyu-wishlists
-        image: us.icr.io/nyu-wishlists/wishlists:1.0
+        image: us.icr.io/nyu-wishlists/wishlists:1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
