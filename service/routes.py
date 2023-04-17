@@ -87,7 +87,7 @@ def list_wishlists():
         wishlists = Wishlist.find_by_name(name)
     else:
         wishlists = Wishlist.all()
-
+    
     # Return as an array of dictionaries
     results = [wishlist.serialize() for wishlist in wishlists]
 
@@ -284,9 +284,20 @@ def list_items(wishlist_id):
             status.HTTP_404_NOT_FOUND,
             f"Wishlist with id '{wishlist_id}' could not be found.",
         )
-
+    # Process the query available if added
+    temp = wishlist.items
+    available = request.args.get("available")
+    if available:
+        for item in temp:
+            if item.item_available is False:
+                temp.remove(item)
+            else:
+                pass
+        results = [item.serialize() for item in temp]
+    else:
+        results = [item.serialize() for item in temp]
     # Get the items for the wishlist
-    results = [item.serialize() for item in wishlist.items]
+    
 
     return make_response(jsonify(results), status.HTTP_200_OK)
 

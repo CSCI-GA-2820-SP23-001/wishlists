@@ -156,8 +156,8 @@ class Item(db.Model, PersistentBase):
                 "bad or no data " + error.args[0]
             ) from error
         return self
-
-
+    
+    
 ######################################################################
 #  W I S H L I S T   M O D E L
 ######################################################################
@@ -232,3 +232,4 @@ class Wishlist(db.Model, PersistentBase):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
+
