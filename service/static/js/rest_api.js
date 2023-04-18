@@ -38,8 +38,8 @@ $(function () {
 
         let data = {
             "name": name,
-            "id": id,
-            "account_id": account_id,
+            "id": parseInt(id),
+            "account_id": parseInt(account_id),
             "items": items,
         };
         console.log(data);
@@ -69,15 +69,15 @@ $(function () {
     // ****************************************
 
     $("#update-btn").click(function () {
-        let wishlist_name = $("#wishlist_name").val();
+        let name = $("#wishlist_name").val();
         let id = $("#wishlist_id").val();
         let account_id = $("#account_id").val();
         let items = $("#items").val();
 
         let data = {
-            "id": id,
-            "name": wishlist_name,
-            "account_id": account_id,
+            "name": name,
+            "id": parseInt(id),
+            "account_id": parseInt(account_id),
             "items": items,
         };
 
