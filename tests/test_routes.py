@@ -250,9 +250,6 @@ class TestWishlistService(TestCase):
         self.assertEqual(data["item_available"], item.item_available)
         self.assertEqual(data["count"], item.count)
 
-    # Neal Comment - unsure of the purpose of this one, but it's not up to date and seems to have slipped through
-    # by being too indented and never called
-    # to modify: highlight all -> control/command+K+U uncomment all
     def test_get_item_list(self):
         """It should Get a list of Items"""
         # add two items to wishlist

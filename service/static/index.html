@@ -45,25 +45,25 @@
 
             <!-- NAME -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="name">Name:</label>
+              <label class="control-label col-sm-2" for="wishlist_name">Name:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" id="name" placeholder="Enter name for Wishlist">
+                <input type="text" class="form-control" name="wishlist_name" id="wishlist_name" placeholder="Enter name for Wishlist">
               </div>
             </div>
 
             <!-- ID -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="id">ID:</label>
+              <label class="control-label col-sm-2" for="wishlist_id">ID:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" name="id" id="id" placeholder="Enter ID for Wishlist">
+                <input type="number" class="form-control" name="wishlist_id" id="wishlist_id" placeholder="Enter ID for Wishlist">
               </div>
             </div>
 
             <!-- ACCOUNT ID -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="account_id">Available:</label>
+              <label class="control-label col-sm-2" for="account_id">Account ID:</label>
               <div class="col-sm-10">
-                <input type="text" select class="form-control" name="account_id" id="account_id" placeholder="Enter the account ID">
+                <input type="number" class="form-control" name="account_id" id="account_id" placeholder="Enter the account ID">
               </div>
             </div>
 
@@ -78,7 +78,11 @@
             <!-- SUBMIT BUTTONS -->
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success" id="submit">Create</button>
+                <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+                <button type="submit" class="btn btn-info" id="clear-btn">Clear</button>
+                <button type="submit" class="btn btn-success" id="create-btn">Create</button>
+                <button type="submit" class="btn btn-warning" id="update-btn">Update</button>
+                <button type="submit" class="btn btn-danger" id="delete-btn">Delete</button>
               </div>
             </div>
 
@@ -94,7 +98,11 @@
 
     </div> <!-- container -->
 
-  <script type="text/javascript" src = "static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src = "static/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src = "static/js/bootstrap.min.js"></script>
+  
+    <!-- YOUR REST API -->
+    <script type="text/javascript" src="static/js/rest_api.js"></script>  
 
   </body>
 </html>

@@ -6,17 +6,17 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#wishlist_id").val(res.id);
+        $("#wishlist_name").val(res.wishlist_name);
+        $("#wishlist_id").val(res.wishlist_id);
         $("#account_id").val(res.account_id);
-        $("#wishlist_name").val(res.name);
         $("#items").val(res.items);
     }
 
     /// Clears all form fields
     function clear_form_data() {
+        $("#wishlist_name").val("");
         $("#wishlist_id").val("");
         $("#account_id").val("");
-        $("#wishlist_name").val("");
         $("#items").val("");
     }
 
@@ -31,18 +31,15 @@ $(function () {
     // ****************************************
 
     $("#create-btn").click(function () {
-
         let id = $("#wishlist_id").val();
+        let name = $("#wishlist_name").val();
         let account_id = $("#account_id").val();
-        let wishlist_name = $("#wishlist_name").val();
         let items = $("#items").val();
 
-
-
         let data = {
+            "name": name,
             "id": id,
             "account_id": account_id,
-            "name": wishlist_name,
             "items": items,
         };
         console.log(data);
@@ -56,12 +53,12 @@ $(function () {
             data: JSON.stringify(data),
         });
 
-        ajax.done(function(res){
-            update_form_data(res)
+        ajax.done(function(){
+            update_form_data()
             flash_message("Success")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function(){
             flash_message(res.responseJSON.message)
         });
     });
@@ -72,15 +69,15 @@ $(function () {
     // ****************************************
 
     $("#update-btn").click(function () {
+        let wishlist_name = $("#wishlist_name").val();
         let id = $("#wishlist_id").val();
         let account_id = $("#account_id").val();
-        let wishlist_name = $("#wishlist_name").val();
         let items = $("#items").val();
 
         let data = {
             "id": id,
-            "account_id": account_id,
             "name": wishlist_name,
+            "account_id": account_id,
             "items": items,
         };
 
@@ -135,7 +132,7 @@ $(function () {
     });
 
     // ****************************************
-    // Delete an Wishlist
+    // Delete a Wishlist
     // ****************************************
 
     $("#delete-btn").click(function () {
@@ -177,12 +174,15 @@ $(function () {
 
     $("#search-btn").click(function () {
 
-        let name = $("#name").val();
+        let wishlist_name = $("#wishlist_name").val();
 
-        let queryString = ""
+        let queryStrings = []
 
-        if (name) {
-            queryString += 'name=' + name
+        if (wishlist_name) {
+            queryStrings.push('name=' + wishlist_name)
+        }
+        if (wishlist_id) {
+            queryStrings.push('id=' + wishlist_id)
         }
 
 
@@ -190,7 +190,7 @@ $(function () {
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/wishlists?${queryString}`,
+            url: `/wishlists?${queryStrings.join('&')}`,
             contentType: "application/json",
             data: ''
         })
@@ -200,9 +200,9 @@ $(function () {
             $("#search_results").empty();
             let table = '<table class="table table-striped" cellpadding="10">'
             table += '<thead><tr>'
+            table += '<th class="col-md-2">Name</th>'
             table += '<th class="col-md-2">ID</th>'
             table += '<th class="col-md-2">Account ID</th>'
-            table += '<th class="col-md-2">Name</th>'
             table += '<th class="col-md-2">Items</th>'
 
 
@@ -210,7 +210,7 @@ $(function () {
             let firstWishlist = "";
             for(let i = 0; i < res.length; i++) {
                 let wishlist = res[i];
-                table +=  `<tr id="row_${i}"><td>${wishlist.id}</td><td>${wishlist.account_id}</td><td>${wishlist.name}</td><td>${wishlist.items}</td></tr>`;
+                table +=  `<tr id="row_${i}"><td>${wishlist.name}</td><td>${wishlist.id}</td><td>${wishlist.account_id}</td><td>${wishlist.items}</td></tr>`;
                 if (i == 0) {
                     firstWishlist = wishlist;
                 }
