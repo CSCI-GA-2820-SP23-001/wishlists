@@ -106,6 +106,13 @@ class TestWishlistService(TestCase):
         resp = self.client.get("/")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+    def test_health(self):
+        """It should be healthy"""
+        response = self.client.get("/health")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["status"], "OK")
+
     def test_create_wishlist(self):
         """It should Create a new Wishlist"""
         wishlist = WishlistFactory()
@@ -270,6 +277,48 @@ class TestWishlistService(TestCase):
 
         data = resp.get_json()
         self.assertEqual(len(data), 2)
+
+    def test_query_available(self):
+        # it should get a list of available items
+        # add four items to wishlist
+        wishlist = self._create_wishlists(1)[0]
+        item_list = ItemFactory.create_batch(4)
+        # create item 1
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[0].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # create item 2
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[1].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # create item 3
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[2].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # create item 4
+        resp = self.client.post(
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[3].serialize()
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # get the list back and make sure there are 2
+        resp = self.client.get(
+            f"{BASE_URL}/{wishlist.id}/items", query_string=f"available={True}"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        available_cnt = 0
+        for item in item_list:
+            if item.item_available is True:
+                available_cnt += 1
+        data = resp.get_json()
+        self.assertEqual(len(data), available_cnt)
 
     #################################################################
     # Update
