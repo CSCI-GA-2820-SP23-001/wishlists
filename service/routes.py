@@ -285,15 +285,11 @@ def list_items(wishlist_id):
             f"Wishlist with id '{wishlist_id}' could not be found.",
         )
     # Process the query available if added
-    temp = wishlist.items
     available = request.args.get("available")
     if available:
-        for item in temp:
-            if item.item_available is False:
-                temp.remove(item)
-        results = [item.serialize() for item in temp]
+        results = [item.serialize() for item in wishlist.items if item.item_available == True]
     else:
-        results = [item.serialize() for item in temp]
+        results = [item.serialize() for item in wishlist.items]
     # Get the items for the wishlist
 
     return make_response(jsonify(results), status.HTTP_200_OK)
