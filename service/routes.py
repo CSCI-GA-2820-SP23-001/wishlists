@@ -291,8 +291,6 @@ def list_items(wishlist_id):
         for item in temp:
             if item.item_available is False:
                 temp.remove(item)
-            else:
-                pass
         results = [item.serialize() for item in temp]
     else:
         results = [item.serialize() for item in temp]
