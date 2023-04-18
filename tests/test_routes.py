@@ -279,36 +279,38 @@ class TestWishlistService(TestCase):
         self.assertEqual(len(data), 2)
 
     def test_query_available(self):
-        #it should get a list of available items
+        # it should get a list of available items
         # add four items to wishlist
         wishlist = self._create_wishlists(1)[0]
         item_list = ItemFactory.create_batch(4)
-         # create item 1
+        # create item 1
         resp = self.client.post(
-                f"{BASE_URL}/{wishlist.id}/items", json=item_list[0].serialize()
-            )
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[0].serialize()
+        )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
         # create item 2
         resp = self.client.post(
-                f"{BASE_URL}/{wishlist.id}/items", json=item_list[1].serialize()
-            )
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[1].serialize()
+        )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-            # create item 3
+        # create item 3
         resp = self.client.post(
-                f"{BASE_URL}/{wishlist.id}/items", json=item_list[2].serialize()
-            )
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[2].serialize()
+        )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
         # create item 4
         resp = self.client.post(
-                f"{BASE_URL}/{wishlist.id}/items", json=item_list[3].serialize()
-            )
+            f"{BASE_URL}/{wishlist.id}/items", json=item_list[3].serialize()
+        )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-            # get the list back and make sure there are 2
-        resp = self.client.get(f"{BASE_URL}/{wishlist.id}/items", query_string=f"available={True}")
+        # get the list back and make sure there are 2
+        resp = self.client.get(
+            f"{BASE_URL}/{wishlist.id}/items", query_string=f"available={True}"
+        )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         available_cnt = 0
@@ -317,7 +319,6 @@ class TestWishlistService(TestCase):
                 available_cnt += 1
         data = resp.get_json()
         self.assertEqual(len(data), available_cnt)
-        
 
     #################################################################
     # Update

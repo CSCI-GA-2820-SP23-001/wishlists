@@ -20,7 +20,7 @@ from . import app
 @app.route("/health")
 def health():
     """Health Status"""
-    return {"status": 'OK'}, status.HTTP_200_OK
+    return {"status": "OK"}, status.HTTP_200_OK
 
 
 ######################################################################
@@ -87,7 +87,7 @@ def list_wishlists():
         wishlists = Wishlist.find_by_name(name)
     else:
         wishlists = Wishlist.all()
-    
+
     # Return as an array of dictionaries
     results = [wishlist.serialize() for wishlist in wishlists]
 
@@ -297,7 +297,6 @@ def list_items(wishlist_id):
     else:
         results = [item.serialize() for item in temp]
     # Get the items for the wishlist
-    
 
     return make_response(jsonify(results), status.HTTP_200_OK)
 
