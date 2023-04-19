@@ -287,7 +287,9 @@ def list_items(wishlist_id):
     # Process the query available if added
     available = request.args.get("available")
     if available:
-        results = [item.serialize() for item in wishlist.items if item.item_available == True]
+        results = [
+            item.serialize() for item in wishlist.items if item.item_available is True
+        ]
     else:
         results = [item.serialize() for item in wishlist.items]
     # Get the items for the wishlist
