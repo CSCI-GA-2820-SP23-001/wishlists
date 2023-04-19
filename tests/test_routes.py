@@ -279,7 +279,7 @@ class TestWishlistService(TestCase):
         self.assertEqual(len(data), 2)
 
     def test_query_available(self):
-        # it should get a list of available items
+        """It should get a list of available items"""
         # add four items to wishlist
         wishlist = self._create_wishlists(1)[0]
         item_list = ItemFactory.create_batch(4)
