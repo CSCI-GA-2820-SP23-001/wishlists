@@ -34,13 +34,13 @@ $(function () {
         let id = $("#wishlist_id").val();
         let name = $("#wishlist_name").val();
         let account_id = $("#account_id").val();
-        //let items = $("#items").val();
+        let items = $("#items").val();
 
         let data = {
-            "name": name,
             "id": parseInt(id),
             "account_id": parseInt(account_id),
-            //"items": items,
+            "name": name,
+            "items": items,
         };
         console.log(data);
 
@@ -75,9 +75,9 @@ $(function () {
         let items = $("#items").val();
 
         let data = {
-            "name": name,
             "id": parseInt(id),
             "account_id": parseInt(account_id),
+            "name": name,
             "items": items,
         };
 
