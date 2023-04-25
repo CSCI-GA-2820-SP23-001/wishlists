@@ -25,6 +25,8 @@ BASE_URL = "/wishlists"
 class TestWishlistService(TestCase):
     """Wishlist Service Tests"""
 
+    # pylint: disable=too-many-public-methods
+
     @classmethod
     def setUpClass(cls):
         """Run once before all tests"""
