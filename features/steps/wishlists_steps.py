@@ -12,6 +12,7 @@ import os
 import requests
 from behave import given, when, then
 
+
 @given('the server is started')
 def step_impl(context):
     context.base_url = os.getenv(
@@ -21,14 +22,17 @@ def step_impl(context):
     context.resp = requests.get(context.base_url + '/')
     assert context.resp.status_code == 200
 
+
 @when(u'I visit the "home page"')
 def step_impl(context):
     context.resp = requests.get(context.base_url + '/')
     assert context.resp.status_code == 200
 
+
 @then(u'I should see "{message}" in the title')
 def step_impl(context, message):
     assert message in str(context.resp.text)
+
 
 @then('I should not see "{message}"')
 def step_impl(context, message):
