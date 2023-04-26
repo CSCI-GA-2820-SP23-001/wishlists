@@ -29,14 +29,8 @@ def health():
 @app.route("/")
 def index():
     """Root URL response"""
-    return (
-        jsonify(
-            name="Wishlist REST API Service",
-            version="1.0",
-            paths=url_for("list_wishlists", _external=True),
-        ),
-        status.HTTP_200_OK,
-    )
+    app.logger.info("Request for Root URL")
+    return app.send_static_file("index.html")
 
 
 ######################################################################
@@ -65,7 +59,7 @@ def create_wishlists():
     message = wishlist.serialize()
     # Uncomment this code once get_wishlists is implemented
     location_url = url_for("get_wishlists", wishlist_id=wishlist.id, _external=True)
-    # location_url = "Unknown"
+    app.logger.info("Wishlist with ID [%s] created.", wishlist.id)
 
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
