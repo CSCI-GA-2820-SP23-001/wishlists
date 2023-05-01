@@ -1,0 +1,26 @@
+import requests
+from behave import given
+from compare import expect
+
+
+@given('the following wishlists')
+def step_impl(context):
+    # List all of the wishlists and delete them one by one
+    rest_endpoint = f"{context.BASE_URL}/wishlists"
+    context.resp = requests.get(rest_endpoint)
+    expect(context.resp.status_code).to_equal(200)
+    for wishlists in context.resp.json():
+        context.resp = requests.delete(f"{rest_endpoint}/{wishlists['id']}")
+        expect(context.resp.status_code).to_equal(204)
+
+    # load the database with new wishlists
+    for row in context.table:
+        payload = {
+            "name": row['name'],
+            "category": row['category'],
+            "available": row['available'] in ['True', 'true', '1'],
+            #"gender": row['gender'],
+            #"birthday": row['birthday']
+        }
+        context.resp = requests.post(rest_endpoint, json=payload)
+        expect(context.resp.status_code).to_equal(201)
