@@ -37,3 +37,31 @@ def step_impl(context, message):
 @then('I should not see "{message}"')
 def step_impl(context, message):
     assert message not in str(context.resp.text)
+
+@when('I set the "{element_name}" to "{text_string}"')
+def step_impl(context, element_name, text_string):
+    element_id =  element_name.lower().replace(' ', '_')
+    element = context.driver.find_element_by_id(element_id)
+    element.clear()
+    element.send_keys(text_string)
+
+
+@when('I select "{text}" in the "{element_name}" dropdown')
+def step_impl(context, text, element_name):
+    element_id = element_name.lower().replace(' ', '_')
+    element = Select(context.driver.find_element_by_id(element_id))
+    element.select_by_visible_text(text)
+
+
+@then('I should see "{text}" in the "{element_name}" dropdown')
+def step_impl(context, text, element_name):
+    element_id = element_name.lower().replace(' ', '_')
+    element = Select(context.driver.find_element_by_id(element_id))
+    expect(element.first_selected_option.text).to_equal(text)
+
+
+@then('the "{element_name}" field should be empty')
+def step_impl(context, element_name):
+    element_id = element_name.lower().replace(' ', '_')
+    element = context.driver.find_element_by_id(element_id)
+    expect(element.get_attribute("value")).to_be("")

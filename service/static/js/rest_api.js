@@ -256,11 +256,16 @@ $(function () {
         } else{
             item_count = $("#item_count").val();
         }
+        if( ($("#item_available").val()) == ""){
+            item_count = 1;
+        } else{
+            item_count = $("#item_count").val();
+        }
         
         let data = {
             "id": item_id,
             "wishlist_id": wishlist_id,
-            "sku": parseInt(product_id),
+            "sku": parseInt(sku),
             "item_available": item_available,
             "count": parseInt(item_count),
         };
