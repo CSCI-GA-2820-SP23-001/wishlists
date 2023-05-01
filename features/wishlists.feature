@@ -6,25 +6,24 @@ Feature: The Wishlist service back-end
 Background:
     Given the server is started
 
-Scenario: The server is running
-    When I visit the "Home Page"
-    Then I should see "Wishlist REST API Service" in the title
-    And I should not see "404 Not Found"
-
-Background:
     Given the following wishlists
-        | name      | customer_id |
-        | wish_1    | 3    | 
-        | wish_2    | 3    | 
-        | wish_3    | 4    |
-        | wish_4    | 5    |
+        | Wishlist name | Account ID |
+        | wish_1        | 3    | 
+        | wish_2        | 3    | 
+        | wish_3        | 4    |
+        | wish_4        | 5    |
 
     Given the following wishlist items
-        | item_id   | wishlist_id_2 | sku | item_available | item_count |
+        | item_id   | wishlist_id | sku | item_available | item_count |
         | 1         | 111       | 3 | 5 | 100 |
         | 2         | 112       | 4 | 2 | 250 |
         | 3         | 113       | 5 | 3 | 150 |
         | 4         | 114       | 6 | 1 | 200 |
+
+Scenario: The server is running
+    When I visit the "Home Page"
+    Then I should see "Wishlist REST API Service" in the title
+    And I should not see "404 Not Found"
 
 Scenario: The server is running
     When I visit the "Home Page"
@@ -158,11 +157,11 @@ Scenario: Create a Wishlist Item
     When I copy the "Wishlist Id" field
     And I press the "Clear" button
     When I paste the "Wishlist Id" field
-    And I set the "Item Name" to "item_3"
+    And I set the "Item ID" to "3"
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should see "item_3" in the "Item Name" field
-    When I change "Item Name" to "item_rename"
+    And I should see "3" in the "Item ID" field
+    When I change "Item ID" to "6"
     And I press the "Update-Item" button
     Then I should see the message "Success"
     When I set the "Wishlist name" to "wish_2"
@@ -173,8 +172,8 @@ Scenario: Create a Wishlist Item
     When I paste the "Wishlist Id" field
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should see "item_rename" in the item results
-    And I should not see "item_3" in the item results
+    And I should see "6" in the item results
+    And I should not see "3" in the item results
 
 Scenario: List all Wishlists Items in a Wishlist
     When I visit the "Home Page"
@@ -186,9 +185,8 @@ Scenario: List all Wishlists Items in a Wishlist
     When I paste the "Wishlist Id" field
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should see "item_1" in the item results
-    And I should see "item_2" in the item results
-    And I should not see "item_3" in the results
+    And I should see "1" in the item results
+    And I should not see "3" in the results
 
 
 Scenario: Search for Wishlist Item with given name
@@ -199,12 +197,12 @@ Scenario: Search for Wishlist Item with given name
     When I copy the "Wishlist Id" field
     And I press the "Clear" button
     When I paste the "Wishlist Id" field
-    And I set the "Item Name" to "item_1"
+    And I set the "Item ID" to "1"
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should see "item_1" in the item results
-    And I should not see "item_2" in the item results
-    And I should not see "item_3" in the item results
+    And I should see "1" in the item results
+    And I should not see "2" in the item results
+    And I should not see "3" in the item results
 
 
 Scenario: Delete a Wishlist
@@ -215,10 +213,10 @@ Scenario: Delete a Wishlist
     When I copy the "Wishlist Id" field
     And I press the "Clear" button
     When I paste the "Wishlist Id" field
-    And I set the "Item Name" to "item_1"
+    And I set the "Item ID" to "1"
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should see "item_1" in the "Item Name" field
+    And I should see "1" in the "Item ID" field
     When I press the "Delete-Item" button
     Then I should see the message "Item has been Deleted!"
     When I press the "Clear" button
@@ -230,6 +228,6 @@ Scenario: Delete a Wishlist
     When I paste the "Wishlist Id" field
     And I press the "Search-Item" button
     Then I should see the message "Success"
-    And I should not see "item_1" in the item results
-    And I should see "item_2" in the item results
-    And I should not see "item_3" in the results
+    And I should not see "1" in the item results
+    And I should see "2" in the item results
+    And I should not see "3" in the results
