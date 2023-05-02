@@ -7,7 +7,7 @@ Background:
     Given the server is started
 
     Given the following wishlists
-        | Wishlist name | Account ID |
+        | name          | account_id |
         | wish_1        | 3    | 
         | wish_2        | 3    | 
         | wish_3        | 4    |
@@ -23,11 +23,6 @@ Background:
 Scenario: The server is running
     When I visit the "Home Page"
     Then I should see "Wishlist REST API Service" in the title
-    And I should not see "404 Not Found"
-
-Scenario: The server is running
-    When I visit the "Home Page"
-    Then I should see "Wishlists Demo REST API Service" in the title
     And I should not see "404 Not Found"
 
 Scenario: Create a Wishlist
@@ -148,7 +143,7 @@ Scenario: Create a Wishlist Item
     And I press the "Retrieve-Item" button
     Then I should see the message "Success"
     And I should see "5" in the "Item ID" field
-    #########
+
  Scenario: Update a Wishlist Item
     When I visit the "Home Page"
     And I set the "Wishlist name" to "wish_2"

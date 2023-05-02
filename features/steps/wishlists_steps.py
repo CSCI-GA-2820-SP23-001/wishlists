@@ -24,7 +24,7 @@ def step_impl(context):
     assert context.resp.status_code == 200
 
 
-@when(u'I visit the "home page"')
+@when(u'I visit the "Home Page"')
 def step_impl(context):
     context.resp = requests.get(context.base_url + '/')
     assert context.resp.status_code == 200
@@ -168,8 +168,8 @@ def step_impl(context):
     # load the database with new wishlists
     for row in context.table:
         payload = {
-            "Wishlist Name": row['Wishlist Name'],
-            "Account ID": int(row['account_id'])
+            "name": row['name'],
+            "account_id": int(row['account_id'])
         }
         context.resp = requests.post(rest_endpoint, json=payload)
         expect(context.resp.status_code).to_equal(201)
