@@ -12,6 +12,9 @@ import os
 import requests
 from behave import given, when, then
 from compare import expect
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 
 @given('the server is started')

@@ -7,11 +7,11 @@ Background:
     Given the server is started
 
     Given the following wishlists
-        | name          | account_id |
-        | wish_1        | 3    | 
-        | wish_2        | 3    | 
-        | wish_3        | 4    |
-        | wish_4        | 5    |
+        | id   | name          | account_id |
+        | 123  | wish_1        | 3          | 
+        | 124  | wish_2        | 3          | 
+        | 125  | wish_3        | 4          |
+        | 126  | wish_4        | 5          |
 
     Given the following wishlist items
         | item_id   | wishlist_id | sku | item_available | item_count |

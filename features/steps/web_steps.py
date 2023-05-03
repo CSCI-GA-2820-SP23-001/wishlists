@@ -17,6 +17,7 @@ def step_impl(context):
     # load the database with new wishlists
     for row in context.table:
         payload = {
+            "id": row["id"],
             "name": row['name'],
             "account_id": int(row['account_id'])
         }
